@@ -16,11 +16,17 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     const timeStr = new Date(parseInt(params.cursor, 10)).toISOString()
     builder = builder.where('post.indexedAt', '<', timeStr)
   }
-  const res = await builder.execute()
+  const jp = /[ぁ‐んァ‐ヶ――‐鉞]/
+  
 
-  const feed = res.map((row) => ({
-    post: row.uri,
-  }))
+  const feed = res
+.filter((row) => {
+const text = (row as any).text ?? ''
+return jp.test(text)
+})
+.map((row) => ({
+post: row.uri,
+}))
 
   let cursor: string | undefined
   const last = res.at(-1)
