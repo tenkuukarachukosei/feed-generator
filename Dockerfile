@@ -2,11 +2,12 @@ FROM node:20
 
 WORKDIR /app
 
-COPY . .
+COPY package.json yarn.lock ./
+RUN yarn install
 
-RUN yarn build
+COPY . .
 
 ENV NODE_ENV production
 
 # Use yarn to start the application
-CMD ["node", "dist/server.js"]
+CMD ["yarn", "start"]
