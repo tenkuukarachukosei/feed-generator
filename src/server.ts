@@ -57,7 +57,7 @@ export class FeedGenerator {
     describeGenerator(server, ctx)
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
-    
+
     app.get('/',(_req,res) => {
       res.status(200).send('ok')
     })
@@ -66,12 +66,14 @@ export class FeedGenerator {
 
   async start(): Promise<http.Server> {
     await migrateToLatest(this.db)
-    this.firehose.run(this.cfg.subscriptionReconnectDelay)
+    
     const PORT = Number(process.env.PORT) || this.cfg.port;
 
     this.server = this.app.listen(PORT);
     console.log("Listening on", PORT);
     await events.once(this.server, 'listening')
+    this.firehose.run(this.cfg.subscriptionReconnectDelay)
+    
     return this.server
   }
 }
