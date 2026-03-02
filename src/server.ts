@@ -57,7 +57,10 @@ export class FeedGenerator {
     describeGenerator(server, ctx)
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
-
+    
+    app.get('/',(_req,res) => {
+      res.status(200).send('ok')
+    })
     return new FeedGenerator(app, db, firehose, cfg)
   }
 
