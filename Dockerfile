@@ -8,4 +8,5 @@ RUN yarn install --production=false
 COPY . .
 RUN yarn build
 
-CMD ["yarn", "start"]
+ENV NODE_ENV=proteduction
+CMD ["node", "dist/index.js"]
