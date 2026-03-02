@@ -65,15 +65,24 @@ export class FeedGenerator {
   }
 
   async start(): Promise<http.Server> {
-    await migrateToLatest(this.db)
-    
     const PORT = Number(process.env.PORT) || this.cfg.port;
 
+    
+       
     this.server = this.app.listen(PORT);
     console.log("Listening on", PORT);
     await events.once(this.server, 'listening')
-    this.firehose.run(this.cfg.subscriptionReconnectDelay)
-    
+
+    ; (async () => {
+      try {
+        await migrateToLatest(this.db)
+        this.firehose.run(this.cfg.subscriptionReconnectDelay)
+        console.log('Init done')
+      } catch (e) {
+        console.error('Init failed', e)
+      }
+    })()
+
     return this.server
   }
 }
