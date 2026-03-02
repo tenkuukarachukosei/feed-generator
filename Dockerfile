@@ -6,5 +6,6 @@ COPY package.json yarn.lock ./
 RUN yarn install --production=false
 
 COPY . .
+RUN yarn build
 
 CMD ["yarn", "start"]
