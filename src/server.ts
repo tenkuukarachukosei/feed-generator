@@ -69,7 +69,7 @@ export class FeedGenerator {
 
     
        
-    this.server = this.app.listen(PORT);
+    this.server = this.app.listen(PORT, '0.0.0.0');
     console.log("Listening on", PORT);
     await events.once(this.server, 'listening')
 
